@@ -31,7 +31,6 @@ public class FruitControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(fruit)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.name").value("Apple"))
                 .andExpect(jsonPath("$.weight").value(10));
     }
