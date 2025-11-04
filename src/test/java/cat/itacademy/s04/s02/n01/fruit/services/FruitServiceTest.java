@@ -4,6 +4,7 @@ import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitNameException;
 import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitWeightException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.s02.n01.fruit.repository.FruitRepository;
+import cat.itacademy.s04.s02.n01.fruit.validators.FruitValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,8 @@ public class FruitServiceTest {
     @Mock
     private FruitRepository fruitRepository;
 
+    @Mock
+    private FruitValidator fruitValidator;
     @InjectMocks
     private FruitServiceImpl fruitService;
 
@@ -43,6 +46,9 @@ public class FruitServiceTest {
     void createFruit_shouldThrowException_whenNameIsEmpty() {
         Fruit fruit = new Fruit("", 10);
 
+        doThrow(new InvalidFruitNameException("Fruit name cannot be empty"))
+                .when(fruitValidator).validate(fruit);
+
         assertThrows(InvalidFruitNameException.class, () -> fruitService.createFruit(fruit));
         verify(fruitRepository, never()).save(any());
     }
@@ -50,6 +56,9 @@ public class FruitServiceTest {
     @Test
     void createFruit_shouldThrowException_whenWeightIsInvalid() {
         Fruit fruit = new Fruit("Banana", -5);
+
+        doThrow(new InvalidFruitWeightException("Weight must be positive"))
+                .when(fruitValidator).validate(fruit);
 
         assertThrows(InvalidFruitWeightException.class, () -> fruitService.createFruit(fruit));
         verify(fruitRepository, never()).save(any());
