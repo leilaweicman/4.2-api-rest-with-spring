@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +24,6 @@ public class FruitServiceTest {
 
     @Mock
     private FruitRepository fruitRepository;
-
     @Mock
     private FruitValidator fruitValidator;
     @InjectMocks
@@ -39,7 +41,6 @@ public class FruitServiceTest {
         assertEquals(3, result.getWeight());
 
         verify(fruitRepository, times(1)).save(any(Fruit.class));
-
     }
 
     @Test
@@ -62,5 +63,30 @@ public class FruitServiceTest {
 
         assertThrows(InvalidFruitWeightException.class, () -> fruitService.createFruit(fruit));
         verify(fruitRepository, never()).save(any());
+    }
+
+    @Test
+    void getAllFruits_shouldReturnEmptyList_whenNoFruitsExist() {
+        when(fruitRepository.findAll()).thenReturn(List.of());
+
+        List<Fruit> fruits = fruitService.getAllFruits();
+
+        assertTrue(fruits.isEmpty());
+        verify(fruitRepository).findAll();
+    }
+
+    @Test
+    void getAllFruits_shouldReturnAllFruits_whenTheyExist() {
+        List<Fruit> mockFruits = List.of(
+                new Fruit("Apple", 10),
+                new Fruit("Banana", 5)
+        );
+        when(fruitRepository.findAll()).thenReturn(mockFruits);
+
+        List<Fruit> fruits = fruitService.getAllFruits();
+
+        assertEquals(2, fruits.size());
+        assertEquals("Apple", fruits.get(0).getName());
+        verify(fruitRepository).findAll();
     }
 }
