@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/fruits")
 public class FruitController {
@@ -26,9 +28,13 @@ public class FruitController {
             Fruit created = fruitService.createFruit(fruit);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (InvalidFruitNameException | InvalidFruitWeightException e) {
-            // Si el nombre o el peso son inválidos, devolvemos 400 Bad Request
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Fruit>> getAllFruits() {
+        return ResponseEntity.ok(fruitService.getAllFruits());
     }
 
 }
