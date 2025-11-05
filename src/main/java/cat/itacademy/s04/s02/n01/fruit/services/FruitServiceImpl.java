@@ -6,6 +6,8 @@ import cat.itacademy.s04.s02.n01.fruit.validators.FruitValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FruitServiceImpl implements FruitService {
 
@@ -22,6 +24,11 @@ public class FruitServiceImpl implements FruitService {
     public Fruit createFruit(Fruit fruit) {
         fruitValidator.validate(fruit);
         return fruitRepository.save(fruit);
+    }
+
+    @Override
+    public List<Fruit> getAllFruits() {
+        return fruitRepository.findAll();
     }
 
 }
