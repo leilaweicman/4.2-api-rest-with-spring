@@ -1,5 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.services;
 
+import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitNameException;
 import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitWeightException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +97,8 @@ public class FruitServiceTest {
     @Test
     void getFruitById_shouldReturnFruit_whenExists() {
         Fruit fruit = new Fruit("Banana", 3);
-        fruit.setId(1L);
+        ReflectionTestUtils.setField(fruit, "id", 1L);
+
         when(fruitRepository.findById(1L)).thenReturn(Optional.of(fruit));
 
         Fruit result = fruitService.getFruitById(1L);
@@ -109,8 +112,6 @@ public class FruitServiceTest {
     @Test
     void getFruitById_shouldThrowException_whenNotFound() {
         when(fruitRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        fruitService.getFruitById(1L);
 
         assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(99L));
         verify(fruitRepository).findById(99L);

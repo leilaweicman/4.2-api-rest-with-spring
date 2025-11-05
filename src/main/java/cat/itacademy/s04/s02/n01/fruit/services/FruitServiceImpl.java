@@ -1,5 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.services;
 
+import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.s02.n01.fruit.repository.FruitRepository;
 import cat.itacademy.s04.s02.n01.fruit.validators.FruitValidator;
@@ -29,6 +30,12 @@ public class FruitServiceImpl implements FruitService {
     @Override
     public List<Fruit> getAllFruits() {
         return fruitRepository.findAll();
+    }
+
+    @Override
+    public Fruit getFruitById(Long id) {
+        return fruitRepository.findById(id)
+                .orElseThrow(() -> new FruitNotFoundException(id));
     }
 
 }
