@@ -1,7 +1,9 @@
 package cat.itacademy.s04.s02.n01.fruit.controllers;
 
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
+import cat.itacademy.s04.s02.n01.fruit.repository.FruitRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +23,14 @@ public class FruitControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private FruitRepository fruitRepository;
+
+    @BeforeEach
+    void cleanDatabase() {
+        fruitRepository.deleteAll();
+    }
 
     @Test
     void createFruit_returnsCreatedFruit() throws Exception {
