@@ -91,4 +91,25 @@ public class FruitControllerTest {
                 .andExpect(jsonPath("$[0].name").value("Apple"))
                 .andExpect(jsonPath("$[1].name").value("Banana"));
     }
+
+    @Test
+    void getFruitById_returnsFruit_whenExists() throws Exception {
+        Fruit fruit = new Fruit("Banana", 5);
+
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(fruit)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/fruits/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Banana"))
+                .andExpect(jsonPath("$.weight").value(5));
+    }
+
+    @Test
+    void getFruitById_returnsNotFound_whenMissing() throws Exception {
+        mockMvc.perform(get("/fruits/99"))
+                .andExpect(status().isNotFound());
+    }
 }
