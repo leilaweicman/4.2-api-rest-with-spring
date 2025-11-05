@@ -10,9 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -88,5 +90,29 @@ public class FruitServiceTest {
         assertEquals(2, fruits.size());
         assertEquals("Apple", fruits.get(0).getName());
         verify(fruitRepository).findAll();
+    }
+
+    @Test
+    void getFruitById_shouldReturnFruit_whenExists() {
+        Fruit fruit = new Fruit("Banana", 3);
+        fruit.setId(1L);
+        when(fruitRepository.findById(1L)).thenReturn(Optional.of(fruit));
+
+        Fruit result = fruitService.getFruitById(1L);
+
+        assertEquals("Banana", result.getName());
+        assertEquals(3, result.getWeight());
+
+        verify(fruitRepository).findById(1L);
+    }
+
+    @Test
+    void getFruitById_shouldThrowException_whenNotFound() {
+        when(fruitRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        fruitService.getFruitById(1L);
+
+        assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(99L));
+        verify(fruitRepository).findById(99L);
     }
 }
