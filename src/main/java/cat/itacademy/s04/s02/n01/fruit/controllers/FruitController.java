@@ -1,5 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.controllers;
 
+import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitNameException;
 import cat.itacademy.s04.s02.n01.fruit.exception.InvalidFruitWeightException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
@@ -35,6 +36,15 @@ public class FruitController {
     @GetMapping
     public ResponseEntity<List<Fruit>> getAllFruits() {
         return ResponseEntity.ok(fruitService.getAllFruits());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getFruitById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(fruitService.getFruitById(id));
+        } catch (FruitNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }
