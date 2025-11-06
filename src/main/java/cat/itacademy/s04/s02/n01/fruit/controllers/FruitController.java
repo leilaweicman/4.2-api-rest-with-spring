@@ -47,4 +47,15 @@ public class FruitController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateFruit(@PathVariable Long id, @RequestBody Fruit fruit) {
+        try {
+            Fruit updated = fruitService.updateFruit(id, fruit);
+            return ResponseEntity.ok(updated);
+        } catch (InvalidFruitNameException | InvalidFruitWeightException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (FruitNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
