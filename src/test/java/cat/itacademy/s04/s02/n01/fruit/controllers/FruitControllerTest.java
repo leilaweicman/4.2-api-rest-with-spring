@@ -112,4 +112,46 @@ public class FruitControllerTest {
         mockMvc.perform(get("/fruits/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void updateFruit_returnsUpdatedFruit_whenExists()  throws Exception {
+        Fruit apple = new Fruit("Apple", 10);
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(apple)))
+                .andExpect(status().isCreated());
+
+
+        Fruit banana = new Fruit("Banana", 5);
+        mockMvc.perform(put("/fruits/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(banana)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Banana"))
+                .andExpect(jsonPath("$.weight").value(5));
+    }
+
+    @Test
+    void updateFruit_returnsNotFound_whenMissing() throws Exception {
+        Fruit apple = new Fruit("Apple", 10);
+        mockMvc.perform(put("/fruits/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(apple)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateFruit_returnsBadRequest_whenInvalidData() throws Exception {
+        Fruit apple = new Fruit("Apple", 10);
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(apple)))
+                .andExpect(status().isCreated());
+
+        Fruit fruit = new Fruit("", -10);
+        mockMvc.perform(put("/fruits/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(fruit)))
+                .andExpect(status().isBadRequest());
+    }
 }
