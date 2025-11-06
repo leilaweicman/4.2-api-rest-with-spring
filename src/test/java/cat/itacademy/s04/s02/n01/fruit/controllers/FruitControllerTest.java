@@ -174,4 +174,18 @@ public class FruitControllerTest {
         mockMvc.perform(delete("/fruits/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void createFruit_returnsBadRequest_withJsonErrorBody() throws Exception {
+        Fruit fruit = new Fruit("", 10);
+
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(fruit)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("InvalidFruitNameException"))
+                .andExpect(jsonPath("$.message").value("Fruit name cannot be empty"));
+    }
+
 }
