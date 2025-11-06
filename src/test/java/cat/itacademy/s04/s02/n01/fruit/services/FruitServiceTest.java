@@ -126,7 +126,7 @@ public class FruitServiceTest {
         when(fruitRepository.save(any(Fruit.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Fruit result = fruitService.updateFruit(1L, updated);
+        Fruit result = fruitService.updateFruit(1L, updatedFruit);
 
         assertEquals("Apple Updated", existingFruit.getName());
         assertEquals(15, existingFruit.getWeight());
@@ -153,6 +153,9 @@ public class FruitServiceTest {
 
         Fruit invalid = new Fruit("", 3);
 
+        doThrow(new InvalidFruitNameException("Weight must be positive"))
+                .when(fruitValidator).validate(invalid);
+
         assertThrows(InvalidFruitNameException.class, () -> fruitService.updateFruit(1L, invalid));
         verify(fruitRepository, never()).save(any());
     }
@@ -165,9 +168,11 @@ public class FruitServiceTest {
 
         Fruit invalid = new Fruit("Mango", -5);
 
+        doThrow(new InvalidFruitWeightException("Weight must be positive"))
+                .when(fruitValidator).validate(invalid);
+
         assertThrows(InvalidFruitWeightException.class, () -> fruitService.updateFruit(1L, invalid));
         verify(fruitRepository, never()).save(any());
     }
-
 
 }

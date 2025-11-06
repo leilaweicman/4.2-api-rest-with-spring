@@ -8,4 +8,5 @@ public interface FruitService {
     Fruit createFruit(Fruit fruit);
     List<Fruit> getAllFruits();
     Fruit getFruitById(Long id);
+    Fruit updateFruit(Long id, Fruit fruit);
 }

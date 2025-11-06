@@ -38,4 +38,15 @@ public class FruitServiceImpl implements FruitService {
                 .orElseThrow(() -> new FruitNotFoundException(id));
     }
 
+    @Override
+    public Fruit updateFruit(Long id, Fruit fruit) {
+        Fruit existing = getFruitById(id);
+        fruitValidator.validate(fruit);
+        existing.setName(fruit.getName());
+        existing.setWeight(fruit.getWeight());
+
+        return fruitRepository.save(existing);
+
+    }
+
 }
