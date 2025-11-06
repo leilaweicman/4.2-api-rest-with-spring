@@ -46,7 +46,13 @@ public class FruitServiceImpl implements FruitService {
         existing.setWeight(fruit.getWeight());
 
         return fruitRepository.save(existing);
-
     }
 
+    @Override
+    public void deleteFruit(Long id) {
+        if (!fruitRepository.existsById(id)) {
+            throw new FruitNotFoundException(id);
+        }
+        fruitRepository.deleteById(id);
+    }
 }
