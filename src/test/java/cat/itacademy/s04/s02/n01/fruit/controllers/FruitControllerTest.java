@@ -1,5 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.controllers;
 
+import cat.itacademy.s04.s02.n01.fruit.dto.FruitDTO;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.s02.n01.fruit.repository.FruitRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +37,7 @@ public class FruitControllerTest {
 
     @Test
     void createFruit_returnsCreatedFruit() throws Exception {
-        Fruit fruit = new Fruit("Apple", 10);
+        FruitDTO fruit = new FruitDTO("Apple", 10);
 
         mockMvc.perform(post("/fruits")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +49,7 @@ public class FruitControllerTest {
 
     @Test
     void createFruit_returnsBadRequest_whenNameIsBlank() throws Exception {
-        Fruit fruit = new Fruit("", 10);
+        FruitDTO fruit = new FruitDTO("", 10);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +59,7 @@ public class FruitControllerTest {
 
     @Test
     void createFruit_returnsBadRequest_whenWeightInvalid() throws Exception {
-        Fruit fruit = new Fruit("Apple", -5);
+        FruitDTO fruit = new FruitDTO("Apple", -5);
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(fruit)))
@@ -74,8 +75,8 @@ public class FruitControllerTest {
 
     @Test
     void getAllFruits_returnsListOfFruits_whenFruitsExist() throws Exception {
-        Fruit apple = new Fruit("Apple", 10);
-        Fruit banana = new Fruit("Banana", 5);
+        FruitDTO apple = new FruitDTO("Apple", 10);
+        FruitDTO banana = new FruitDTO("Banana", 5);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +97,7 @@ public class FruitControllerTest {
 
     @Test
     void getFruitById_returnsFruit_whenExists() throws Exception {
-        Fruit fruit = new Fruit("Banana", 5);
+        FruitDTO fruit = new FruitDTO("Banana", 5);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -117,14 +118,14 @@ public class FruitControllerTest {
 
     @Test
     void updateFruit_returnsUpdatedFruit_whenExists()  throws Exception {
-        Fruit apple = new Fruit("Apple", 10);
+        FruitDTO apple = new FruitDTO("Apple", 10);
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(apple)))
                 .andExpect(status().isCreated());
 
 
-        Fruit banana = new Fruit("Banana", 5);
+        FruitDTO banana = new FruitDTO("Banana", 5);
         mockMvc.perform(put("/fruits/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(banana)))
@@ -135,7 +136,7 @@ public class FruitControllerTest {
 
     @Test
     void updateFruit_returnsNotFound_whenMissing() throws Exception {
-        Fruit apple = new Fruit("Apple", 10);
+        FruitDTO apple = new FruitDTO("Apple", 10);
         mockMvc.perform(put("/fruits/99")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(apple)))
@@ -144,13 +145,13 @@ public class FruitControllerTest {
 
     @Test
     void updateFruit_returnsBadRequest_whenInvalidData() throws Exception {
-        Fruit apple = new Fruit("Apple", 10);
+        FruitDTO apple = new FruitDTO("Apple", 10);
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(apple)))
                 .andExpect(status().isCreated());
 
-        Fruit fruit = new Fruit("", -10);
+        FruitDTO fruit = new FruitDTO("", -10);
         mockMvc.perform(put("/fruits/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(fruit)))
@@ -159,7 +160,7 @@ public class FruitControllerTest {
 
     @Test
     void deleteFruit_returnsNoContent_whenFruitExists() throws Exception {
-        Fruit apple = new Fruit("Apple", 10);
+        FruitDTO apple = new FruitDTO("Apple", 10);
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(apple)))
@@ -177,7 +178,7 @@ public class FruitControllerTest {
 
     @Test
     void createFruit_returnsBadRequest_withJsonErrorBody() throws Exception {
-        Fruit fruit = new Fruit("", 10);
+        FruitDTO fruit = new FruitDTO("", 10);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
