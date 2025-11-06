@@ -128,8 +128,8 @@ public class FruitServiceTest {
 
         Fruit result = fruitService.updateFruit(1L, updatedFruit);
 
-        assertEquals("Apple Updated", existingFruit.getName());
-        assertEquals(15, existingFruit.getWeight());
+        assertEquals("Apple Updated", result.getName());
+        assertEquals(15, result.getWeight());
 
         verify(fruitRepository).findById(1L);
         verify(fruitRepository).save(existingFruit);
@@ -175,4 +175,13 @@ public class FruitServiceTest {
         verify(fruitRepository, never()).save(any());
     }
 
+    @Test
+    void deleteFruit_shouldReturnNoContent_whenExists() {
+
+    }
+
+    @Test
+    void deleteFruit_shouldThrowException_whenNotFound() {
+
+    }
 }
