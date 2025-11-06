@@ -58,4 +58,14 @@ public class FruitController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFruit(@PathVariable Long id) {
+        try {
+            fruitService.deleteFruit(id);
+            return ResponseEntity.noContent().build();
+        } catch (FruitNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
