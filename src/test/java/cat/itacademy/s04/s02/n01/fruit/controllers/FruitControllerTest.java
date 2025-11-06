@@ -184,8 +184,8 @@ public class FruitControllerTest {
                         .content(objectMapper.writeValueAsString(fruit)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("InvalidFruitNameException"))
-                .andExpect(jsonPath("$.message").value("Fruit name cannot be empty"));
+                .andExpect(jsonPath("$.error").value("ValidationError"))
+                .andExpect(jsonPath("$.message").value("name: Fruit name cannot be blank"));
     }
 
     @Test
