@@ -156,4 +156,22 @@ public class FruitControllerTest {
                         .content(objectMapper.writeValueAsString(fruit)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deleteFruit_returnsNoContent_whenFruitExists() throws Exception {
+        Fruit apple = new Fruit("Apple", 10);
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(apple)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/fruits/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteFruit_returnsNotFound_whenMissing() throws Exception {
+        mockMvc.perform(delete("/fruits/99"))
+                .andExpect(status().isNotFound());
+    }
 }
