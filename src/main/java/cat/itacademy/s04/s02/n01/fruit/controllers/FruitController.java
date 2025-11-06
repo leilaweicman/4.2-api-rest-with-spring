@@ -36,32 +36,18 @@ public class FruitController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getFruitById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(fruitService.getFruitById(id));
-        } catch (FruitNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        return ResponseEntity.ok(fruitService.getFruitById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFruit(@PathVariable Long id, @RequestBody Fruit fruit) {
-        try {
-            Fruit updated = fruitService.updateFruit(id, fruit);
-            return ResponseEntity.ok(updated);
-        } catch (InvalidFruitNameException | InvalidFruitWeightException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (FruitNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        Fruit updated = fruitService.updateFruit(id, fruit);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteFruit(@PathVariable Long id) {
-        try {
-            fruitService.deleteFruit(id);
-            return ResponseEntity.noContent().build();
-        } catch (FruitNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        fruitService.deleteFruit(id);
+        return ResponseEntity.noContent().build();
     }
 }
