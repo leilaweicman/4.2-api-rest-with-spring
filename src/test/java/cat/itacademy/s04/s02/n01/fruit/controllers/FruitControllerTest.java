@@ -188,4 +188,21 @@ public class FruitControllerTest {
                 .andExpect(jsonPath("$.message").value("Fruit name cannot be empty"));
     }
 
+    @Test
+    void createFruit_returnsBadRequest_whenDTOValidationFails() throws Exception {
+        String invalidJson = """
+        {
+            "name": "",
+            "weight": -3
+        }
+        """;
+
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("ValidationError"))
+                .andExpect(jsonPath("$.message").exists());
+    }
 }
