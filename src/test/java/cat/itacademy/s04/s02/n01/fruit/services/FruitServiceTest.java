@@ -176,12 +176,20 @@ public class FruitServiceTest {
     }
 
     @Test
-    void deleteFruit_shouldReturnNoContent_whenExists() {
+    void deleteFruit_shouldDelete_whenFruitExists() {
+        Long id = 1L;
 
+        when(fruitRepository.existsById(id)).thenReturn(true);
+
+        fruitService.deleteFruit(id);
+        verify(fruitRepository).deleteById(id);
     }
 
     @Test
-    void deleteFruit_shouldThrowException_whenNotFound() {
+    void deleteFruit_shouldThrowException_whenFruitNotFound() {
+        when(fruitRepository.existsById(99L)).thenReturn(false);
 
+        assertThrows(FruitNotFoundException.class, () -> fruitService.deleteFruit(99L));
+        verify(fruitRepository, never()).deleteById(anyLong());
     }
 }
