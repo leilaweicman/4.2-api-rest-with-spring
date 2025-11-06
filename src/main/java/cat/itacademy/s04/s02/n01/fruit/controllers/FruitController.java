@@ -25,12 +25,8 @@ public class FruitController {
 
     @PostMapping
     public ResponseEntity<?> createFruit(@RequestBody Fruit fruit) {
-        try {
-            Fruit created = fruitService.createFruit(fruit);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (InvalidFruitNameException | InvalidFruitWeightException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        Fruit created = fruitService.createFruit(fruit);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
